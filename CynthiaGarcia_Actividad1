@@ -1,0 +1,27 @@
+/******************************************************************************
+
+Nombre del programa: Determinar Mayor o Menor de Edad
+Autor: Cynthia Jeanette Garcia Torres
+Fecha: 27 de Noviembre de 2025
+Descripción:
+Programa que solicita la edad del usuario y determina si es
+mayor o menor de edad, mostrando un mensaje en pantalla.
+
+*******************************************************************************/
+
+#include <iostream>
+using namespace std;
+int main() {
+    int edad;
+    string nombre;
+    cout << "Ingresa tu nombre: ";
+    cin >> nombre;
+    cout << "Ingresa tu edad: ";
+    cin >> edad;
+     if (edad >= 18) {
+        cout << "Bienvenid@ " << nombre << ", eres mayor de edad." << endl;
+    } else {
+        cout << "Bienvenid@ " << nombre << ", eres menor de edad." << endl;
+    }
+    return 0;
+}
