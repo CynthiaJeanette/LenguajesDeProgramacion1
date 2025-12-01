@@ -1,0 +1,33 @@
+/******************************************************************************
+
+Nombre del programa: Suma, Resta, Multiplicación y División de Dos Valores
+Autor: Cynthia Jeanette Garcia Torres
+Fecha: 30 de Noviembre de 2025
+
+*******************************************************************************/
+
+#include <iostream>
+
+int main() {
+
+    float numero1, numero2;
+
+    std::cout << "Escribe el primer número: ";
+    std::cin >> numero1;
+
+    std::cout << "Escribe el segundo número: ";
+    std::cin >> numero2;
+    std::cout << "\n";
+
+    float suma = numero1 + numero2;
+    float resta = numero1 - numero2;
+    float multiplicacion = numero1 * numero2;
+    float division = numero1 / numero2;
+
+    std::cout << "La suma es: " << suma << std::endl;
+    std::cout << "La resta es: " << resta << std::endl;
+    std::cout << "La multiplicación es: " << multiplicacion << std::endl;
+    std::cout << "La división es: " << division << std::endl;
+
+    return 0;
+}
