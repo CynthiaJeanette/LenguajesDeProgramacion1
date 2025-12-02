@@ -1,0 +1,128 @@
+/******************************************************************************
+
+Nombre del programa: Cálculo de RFC sin Homoclave
+Autor: Cynthia Jeanette García Torres
+Fecha: 1ro de Diciembre de 2025
+
+*******************************************************************************/
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// Lista de combinaciones no permitidas al inicio del RFC
+const vector<string> palabrasProhibidas = {
+    "CACA", "PEDO", "COLA", "LELA", "PENE"
+};
+
+// Verifica si las primeras cuatro letras forman una palabra prohibida
+string corregirRFC(const string& rfc) {
+
+    string primeras4 = rfc.substr(0, 4);
+
+    for (const string& palabra : palabrasProhibidas) {
+        if (primeras4 == palabra) {
+            return rfc.substr(0, 3) + "X";   // Sustituye la última letra
+        }
+    }
+
+    return rfc;
+}
+
+// Devuelve la primera vocal que no sea la inicial del apellido
+char obtenerPrimeraVocalInterna(const string& cadena) {
+
+    for (size_t i = 1; i < cadena.length(); i++) {
+        char letra = toupper(cadena[i]);
+
+        if (letra=='A' || letra=='E' || letra=='I' || letra=='O' || letra=='U') {
+            return letra;
+        }
+    }
+
+    return 'X';
+}
+
+// Ensambla el RFC con los datos proporcionados
+string calcularRFC(const string& nombre,
+                   const string& apPat,
+                   const string& apMat,
+                   const string& fecha) {
+
+    string nom  = nombre;
+    string pat  = apPat;
+    string mat  = apMat;
+
+    // Convertir todo a mayúsculas
+    for (char &c : nom) c = toupper(c);
+    for (char &c : pat) c = toupper(c);
+    for (char &c : mat) c = toupper(c);
+
+    string rfc;
+
+    // Primera parte del RFC
+    rfc += pat[0];                                // Inicial del apellido paterno
+    rfc += obtenerPrimeraVocalInterna(pat);       // Vocal interna del apellido paterno
+    rfc += (mat.empty() ? 'X' : mat[0]);          // Inicial del apellido materno o X
+    rfc += nom[0];                                // Inicial del nombre
+
+    // Corrección por palabra prohibida
+    rfc = corregirRFC(rfc);
+
+    // Agregar los dígitos de fecha (ya vienen en formato YYYY-MM-DD)
+    string anio = fecha.substr(2, 2);
+    string mes  = fecha.substr(5, 2);
+    string dia  = fecha.substr(8, 2);
+
+    rfc += anio + mes + dia;
+
+    return rfc;
+}
+
+int main() {
+
+    cout << "=== Generador de RFC sin homoclave ===\n\n";
+
+    string nombre, apPaterno, apMaterno;
+    int dia, mes, anio;
+
+    cout << "Nombre(s): ";
+    getline(cin, nombre);
+
+    cout << "Apellido paterno: ";
+    getline(cin, apPaterno);
+
+    cout << "Apellido materno (ENTER si no aplica): ";
+    getline(cin, apMaterno);
+
+    // Captura de la fecha de nacimiento: primero día, luego mes, al final el año
+    cout << "\nDia de nacimiento (01-31): ";
+    cin >> dia;
+    while (dia < 1 || dia > 31) {
+        cout << "Valor invalido. Intenta de nuevo: ";
+        cin >> dia;
+    }
+
+    cout << "Mes de nacimiento (01-12): ";
+    cin >> mes;
+    while (mes < 1 || mes > 12) {
+        cout << "Mes no valido. Ingresa un numero entre 01 y 12: ";
+        cin >> mes;
+    }
+
+    cout << "Año de nacimiento (YYYY): ";
+    cin >> anio;
+
+    // Construir la fecha con formato estándar
+    string diaStr  = (dia < 10 ? "0" : "") + to_string(dia);
+    string mesStr  = (mes < 10 ? "0" : "") + to_string(mes);
+    string anioStr = to_string(anio);
+    string fecha   = anioStr + "-" + mesStr + "-" + diaStr;
+
+    string rfc = calcularRFC(nombre, apPaterno, apMaterno, fecha);
+
+    cout << "\nRFC generado: " << rfc << "\n";
+
+    return 0;
+}
